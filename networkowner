@@ -1,0 +1,8 @@
+	if _G.netted ~= true then
+		_G.netted = true
+		coroutine.wrap(function()
+			settings().Physics.AllowSleep = false
+			game:GetService("RunService").RenderStepped:Connect(function()
+				game:FindFirstChildOfClass("Players").LocalPlayer.MaximumSimulationRadius=math.pow(math.huge,math.huge)
+				sethiddenproperty(game:FindFirstChildOfClass("Players").LocalPlayer,"SimulationRadius",math.huge*math.huge)
+				end
