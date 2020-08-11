@@ -1,0 +1,14 @@
+local me = game:GetService("Players").LocalPlayer
+local mec = me.Character or me.CharacterAdded:Wait()
+local load = function(char)
+ char:WaitForChild("BodyEffects").Movement.DescendantAdded:Connect(function(v)
+    wait()
+    v:Destroy()
+ end)
+end
+
+
+load(mec)
+me.CharacterAdded:Connect(function(char)
+   load(char)
+end)
