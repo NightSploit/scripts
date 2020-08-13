@@ -1,0 +1,50 @@
+local og = Vector3.new(0,-2.01,0)
+sethiddenproperty(workspace.Terrain, "Decoration", true)
+for i,v in pairs(workspace:GetDescendants()) do
+if v:IsA("Part") and v.Size.Z >= 25 and v.Orientation.X < 10 and v.Orientation.Z < 10 and v.Size.Y > 3.5 and v.Material == Enum.Material.Grass then
+workspace.Terrain:FillBlock(v.CFrame + og, v.Size, Enum.Material.Grass)
+delay(3, function()
+v.Transparency = 1
+end)
+elseif v:IsA("WedgePart") and v.Size.Z >= 15 and v.Orientation.X < 10 and v.Orientation.Z < 10 and v.Size.Y > 3.5 and v.Material == Enum.Material.Grass then
+workspace.Terrain:FillWedge(v.CFrame + og, v.Size, Enum.Material.Grass)
+delay(3, function()
+v.Transparency = 1
+end)
+end
+end
+
+local function regionPaintPart(p, yC, padding)
+padding = padding or 0
+local s = p.Size+Vector3.new(padding*2,0,padding*2)
+for x=1, s.X/3 do
+for z=1, s.Z/3 do
+if ((z+x)%200)==0 then
+wait()
+end
+local p2c = CFrame.new(p.CFrame:PointToWorldSpace(Vector3.new(x*3,yC,z*3)-Vector3.new(s.X/2,0,s.Z/2)))
+local p2s = Vector3.new(5,5,5)
+local r = Region3.new(p2c:PointToWorldSpace(-Vector3.new(p2s.X/2,5,p2s.Z/2)), p2c:PointToWorldSpace(Vector3.new(p2s.X/2,5,p2s.Z/2)))
+workspace.Terrain:ReplaceMaterial(r:ExpandToGrid(4) ,4,Enum.Material.Grass, Enum.Material.LeafyGrass)
+end
+end
+end
+
+local function FixGrassPart(p, pad)
+regionPaintPart(p, 0, pad)
+end
+
+local function FixAllGrassParts(pad)
+for _, v in pairs(workspace:GetDescendants()) do
+if v:IsA("BasePart") and not v:IsA("MeshPart") and not v:IsA("Terrain") and v.Size.Y < 10 and v.Material ~= Enum.Material.Grass then
+if (_%100)==0 then
+wait()
+end
+FixGrassPart(v, pad)
+end
+end
+end
+
+wait()
+
+FixAllGrassParts(2)
